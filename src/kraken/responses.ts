@@ -4,6 +4,89 @@ import ILedger from "../interfaces/ILedger";
 import ITrade from "../interfaces/ITrade";
 import IAssetPair from "../interfaces/IAssetPair";
 
+export type ClosedOrdersResponse = {
+  closed: {
+    [id: string]: {
+      refid?: string;
+      userref: number;
+      status: string;
+      reason?: string;
+      openttm: number;
+      closetm: number;
+      starttm: number;
+      expiretm: number;
+      descr: {
+        pair: string;
+        type: string;
+        ordertype: string;
+        price: string;
+        price2: string;
+        leverage: string;
+        order: string;
+        close: string;
+      };
+      vol: string;
+      vol_exec: string;
+      cost: string;
+      fee: string;
+      price: string;
+      stopprice: string;
+      limitprice: string;
+      misc: string;
+      offlags: string;
+    };
+  };
+  count: number;
+};
+
+export type OpenOrdersResponse = {
+  open: {
+    [id: string]: {
+      refid?: string;
+      userref: number;
+      status: string;
+      openttm: number;
+      starttm: number;
+      expiretm: number;
+      descr: {
+        pair: string;
+        type: string;
+        ordertype: string;
+        price: string;
+        price2: string;
+        leverage: string;
+        order: string;
+        close: string;
+      };
+      vol: string;
+      vol_exec: string;
+      cost: string;
+      fee: string;
+      price: string;
+      stopprice: string;
+      limitprice: string;
+      misc: string;
+      offlags: string;
+    };
+  };
+};
+
+export type TradeBalanceResponse = {
+  eb: string;
+  tb: string;
+  m: string;
+  n: string;
+  c: string;
+  v: string;
+  e: string;
+  mf: string;
+  ml: string;
+};
+
+export type AccountBalanceResponse = {
+  [assetName: string]: string;
+};
+
 export type OrderBookResponse = {
   [id: string]: {
     asks: [[any]];

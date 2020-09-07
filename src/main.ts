@@ -3,8 +3,12 @@ import api from "./kraken/api";
 
 async function main() {
   const db = await getDb();
-  const res = await api.getRecentTrades({ pair: "DOTXBT" });
-  console.log(res);
+  try {
+    const res = await api.getTradesHistory({});
+    console.log(res);
+  } catch (err) {
+    console.error(err);
+  }
   closeConnection();
 }
 main();

@@ -2,6 +2,10 @@
 import KrakenClient from "kraken-api";
 import { API_KEY, API_SECRET } from "../config";
 import {
+  ClosedOrdersResponse,
+  OpenOrdersResponse,
+  TradeBalanceResponse,
+  AccountBalanceResponse,
   AssetResponse,
   TickerResponse,
   TimeResponse,
@@ -9,7 +13,7 @@ import {
   OHLCResponse,
   OrderBookResponse,
   RecentTradesResponse,
-  RecentSpreadResponse,
+  RecentSpreadResponse
 } from "./responses";
 
 class KrakenAPI {
@@ -78,21 +82,83 @@ class KrakenAPI {
     const res = await this.kraken.api("Spread", opts);
     return res.result;
   }
+
   // Private
-  async getAccountBalance() {}
-  async getTradeBalance() {}
-  async getOpenOrders() {}
-  async getClosedOrders() {}
-  async queryOrdersInfo() {}
-  async getTradesHistory() {}
-  async queryTradesInfo() {}
-  async getOpenPositions() {}
-  async getLedgersInfo() {}
-  async queryLedgers() {}
-  async getTradeVolume() {}
-  async requestExportReport() {}
+  async getAccountBalance(): Promise<AccountBalanceResponse> {
+    const res = await this.kraken.api("Balance");
+    return res.result;
+  }
+
+  async getTradeBalance(opts: {
+    aclass?: string;
+    asset?: string;
+  }): Promise<TradeBalanceResponse> {
+    const res = await this.kraken.api("TradeBalance", opts);
+    return res.result;
+  }
+
+  async getOpenOrders(opts: {
+    trades?: boolean;
+    userref?: string;
+  }): Promise<OpenOrdersResponse> {
+    const res = await this.kraken.api("OpenOrders", opts);
+    return res.result;
+  }
+
+  async getClosedOrders(opts: {
+    trades?: boolean;
+    userref?: string;
+    start?: number;
+    end?: number;
+    ofs?: number;
+    closetime?: "open" | "close";
+  }): Promise<ClosedOrdersResponse> {
+    const res = await this.kraken.api("ClosedOrders", opts);
+    return res.result;
+  }
+
+  // TODO: add return type
+  async queryOrdersInfo(opts: {
+    txid: string;
+    trades?: boolean;
+    userref?: string;
+  }) {
+    const res = await this.kraken.api("QueryOrders", opts);
+    return res.result;
+  }
+
+  async getTradesHistory(opts: {
+    type?:
+      | "all"
+      | "any position"
+      | "closed position"
+      | "closing position"
+      | "no position";
+    trades?: boolean;
+    start?: number;
+    end?: number;
+    ofs?: number;
+  }) {
+    const res = await this.kraken.api("TradesHistory", opts);
+    return res.result;
+  }
+
+  async queryTradesInfo(opts: {}) {}
+
+  async getOpenPositions(opts: {}) {}
+
+  async getLedgersInfo(opts: {}) {}
+
+  async queryLedgers(opts: {}) {}
+
+  async getTradeVolume(opts: {}) {}
+
+  async requestExportReport(opts: {}) {}
+
   async getExportStatuses() {}
+
   async getExportReport() {}
+
   async removeExportReport() {}
   // Private user trading
   async addStandardOrder() {}
