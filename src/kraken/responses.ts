@@ -101,7 +101,11 @@ export type RecentSpreadResponse = {
   [id: string]: [[number, string, string]];
 };
 
-export type OHLCResponse = { [id: string]: [[number | string]] };
+export type OHLCResponse = {
+  [tickerPair: string]: [
+    [number, string, string, string, string, string, string, number]
+  ];
+} & { last: number };
 
 export type AssetPairResponse = { [id: string]: IAssetPair };
 
