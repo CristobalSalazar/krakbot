@@ -4,8 +4,8 @@ export default interface ITicker {
   c: string[];
   v: string[];
   p: string[];
-  t: string[];
-  l: number[];
+  t: number[];
+  l: string[];
   h: string[];
   o: string;
 }
