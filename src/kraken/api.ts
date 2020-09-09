@@ -7,15 +7,15 @@ import {
   TradeBalanceResponse,
   AccountBalanceResponse,
   AssetResponse,
-  TickerResponse,
   TimeResponse,
   AssetPairResponse,
-  OHLCResponse,
   OrderBookResponse,
   RecentTradesResponse,
   RecentSpreadResponse,
 } from "./responses";
+import { tickerAdapter, ohlcAdapter, OHLCData } from "./adapters";
 
+type KrakenApiResponse = { result: any; error: any[] };
 class KrakenAPI {
   private kraken: KrakenClient;
 
@@ -23,82 +23,73 @@ class KrakenAPI {
     this.kraken = new KrakenClient(pubkey, privatekey);
   }
 
-  public = {
-    /**
-     * Note: this is to aid in approximating the skew time betweent he server and client.
-     * @returns Server's time.
-     */
-    getServerTime: async (): Promise<TimeResponse> => {
-      const res = await this.kraken.api("Time");
+  async fetch(endpoint: string, opts?: any): Promise<any | null> {
+    let res: KrakenApiResponse;
+    if (opts) {
+      res = await this.kraken.api(endpoint, opts);
+    } else {
+      res = await this.kraken.api(endpoint);
+    }
+    if (res.error.length > 0) {
+      console.error("api error", res.error);
+      return null;
+    } else {
       return res.result;
-    },
+    }
+  }
 
-    /**
-     * @returns Array of asset names and their info
-     */
+  public = {
+    getServerTime: async (): Promise<TimeResponse> => {
+      return await this.fetch("Time");
+    },
     getAssetInfo: async (opts?: {
-      /**
-       * Info to retrieve (optional):
-       * info = all info (default)
-       */
       info?: string;
-      /**
-       * Asset class (optional):
-       * currency (default)
-       */
       aclass?: string;
-      /**
-       * Comma delimited list of assets to get info on (optional. default = all for given asset).
-       */
       asset?: string;
     }): Promise<AssetResponse> => {
-      const res = await this.kraken.api("Assets", opts);
-      return res.result;
+      return await this.fetch("Assets", opts);
     },
-
     getTradableAssetPairs: async (opts: {
       info?: "info" | "leverage" | "fees" | "margin";
       pair?: string;
     }): Promise<AssetPairResponse> => {
-      const res = await this.kraken.api("AssetPairs", opts);
-      return res.result;
+      return await this.fetch("AssetPairs", opts);
     },
-
-    getTickerInfo: async (pair: string): Promise<TickerResponse> => {
-      const res = await this.kraken.api("Ticker", { pair });
-      return res.result;
+    getTickerInfo: async (pairs: string[]) => {
+      const res = await this.fetch("Ticker", { pair: pairs.join(",") });
+      if (res) {
+        const tickerInfo = tickerAdapter(res);
+        return tickerInfo;
+      }
     },
-
     getOHLCData: async (opts: {
       pair: string;
       interval?: number;
       since?: string;
-    }): Promise<OHLCResponse> => {
-      const res = await this.kraken.api("OHLC", opts);
-      return res.result;
+    }): Promise<OHLCData> => {
+      const res = await this.fetch("OHLC", opts);
+      if (res) {
+        const ohlc = ohlcAdapter(res);
+        return ohlc;
+      }
     },
-
     getOrderBook: async (opts: {
       pair: string;
       count?: number;
     }): Promise<OrderBookResponse> => {
-      const res = await this.kraken.api("Depth", opts);
-      return res.result;
+      return await this.fetch("Depth", opts);
     },
-
     getRecentTrades: async (opts: {
       pair: string;
       since?: string;
     }): Promise<RecentTradesResponse> => {
-      const res = await this.kraken.api("Trades", opts);
-      return res.result;
+      return await this.fetch("Trades", opts);
     },
     getRecentSpread: async (opts: {
       pair: string;
       since?: string;
     }): Promise<RecentSpreadResponse> => {
-      const res = await this.kraken.api("Spread", opts);
-      return res.result;
+      return await this.fetch("Spread", opts);
     },
   };
 

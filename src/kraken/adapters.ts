@@ -13,49 +13,51 @@ export function accountBalanceAdapter(res: AccountBalanceResponse) {
 }
 
 interface TickerInformation {
-  [tickerPair: string]: {
-    ask: {
-      price: number;
-      wholeLotVolume: number;
-      lotVolume: number;
-    };
-    bid: {
-      price: number;
-      wholeLotVolume: number;
-      lotVolume: number;
-    };
-    lastTradeClosed: {
-      price: number;
-      volume: number;
-    };
-    volume: {
-      today: number;
-      last24hrs: number;
-    };
-    vwap: {
-      today: number;
-      last24hrs: number;
-    };
-    numberOfTrades: {
-      today: number;
-      last24hrs: number;
-    };
-    low: {
-      today: number;
-      last24hrs: number;
-    };
-    high: {
-      today: number;
-      last24hrs: number;
-    };
-    openingPrice: number;
+  pair: string;
+  timestamp?: Date;
+  ask: {
+    price: number;
+    wholeLotVolume: number;
+    lotVolume: number;
   };
+  bid: {
+    price: number;
+    wholeLotVolume: number;
+    lotVolume: number;
+  };
+  lastTradeClosed: {
+    price: number;
+    volume: number;
+  };
+  volume: {
+    today: number;
+    last24hrs: number;
+  };
+  vwap: {
+    today: number;
+    last24hrs: number;
+  };
+  numberOfTrades: {
+    today: number;
+    last24hrs: number;
+  };
+  low: {
+    today: number;
+    last24hrs: number;
+  };
+  high: {
+    today: number;
+    last24hrs: number;
+  };
+  openingPrice: number;
 }
-export function tickerAdapter(res: TickerResponse): TickerInformation {
-  const out: TickerInformation = {};
+
+export function tickerAdapter(res: TickerResponse): TickerInformation[] {
+  let out: TickerInformation[] = [];
   for (let key in res) {
     const info = res[key];
-    out[key] = {
+    out.push({
+      pair: key,
       ask: {
         price: parseFloat(info.a[0]),
         wholeLotVolume: parseFloat(info.a[1]),
@@ -91,7 +93,7 @@ export function tickerAdapter(res: TickerResponse): TickerInformation {
         last24hrs: parseFloat(info.h[1]),
       },
       openingPrice: parseFloat(info.o),
-    };
+    });
   }
   return out;
 }
@@ -106,7 +108,7 @@ interface OHLCInfo {
   volume: number;
   count: number;
 }
-type OHLCData = { last: number } & { [tickerPair: string]: OHLCInfo[] };
+export type OHLCData = { last: number } & { [tickerPair: string]: OHLCInfo[] };
 export function ohlcAdapter(res: OHLCResponse): OHLCData {
   let out: OHLCData = Object.create({});
   for (let key in res) {

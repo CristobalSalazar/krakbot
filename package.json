@@ -4,7 +4,8 @@
   "description": "Kraken trading bot",
   "main": "dist/main.js",
   "scripts": {
-    "start": "yarn build && node dist/main.js",
+    "fetch-asset-pairs": "ts-node scripts/fetchAssetPairs.ts",
+    "start": "yarn build && node dist/src/main.js",
     "build": "tsc",
     "test": "jest --watch"
   },
@@ -21,6 +22,7 @@
   },
   "devDependencies": {
     "@types/jest": "^26.0.13",
+    "@types/lodash": "^4.14.161",
     "@types/mongodb": "^3.5.26",
     "jest": "^26.4.2",
     "ts-jest": "^26.3.0",

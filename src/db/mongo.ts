@@ -13,7 +13,7 @@ export async function getDb(): Promise<Db> {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log("Connected to db...");
+    console.log("Successfully connected to db...");
     return client.db(dbName);
   } catch (err) {
     console.error("Unable to connect to database", err);
