@@ -6,7 +6,7 @@ import IAssetPair from "../interfaces/IAssetPair";
 
 export type ClosedOrdersResponse = {
   closed: {
-    [id: string]: {
+    [tickerPair: string]: {
       refid?: string;
       userref: number;
       status: string;
@@ -41,7 +41,7 @@ export type ClosedOrdersResponse = {
 
 export type OpenOrdersResponse = {
   open: {
-    [id: string]: {
+    [tickerPair: string]: {
       refid?: string;
       userref: number;
       status: string;
@@ -88,17 +88,17 @@ export type AccountBalanceResponse = {
 };
 
 export type OrderBookResponse = {
-  [id: string]: {
+  [tickerPair: string]: {
     asks: [[any]];
     bids: [[any]];
   };
 };
 
 export type RecentTradesResponse = {
-  [id: string]: [[string, string, number, string, string, string]];
+  [tickerPair: string]: [[string, string, number, string, string, string]];
 };
 export type RecentSpreadResponse = {
-  [id: string]: [[number, string, string]];
+  [tickerPair: string]: [[number, string, string]];
 };
 
 export type OHLCResponse = {
@@ -107,26 +107,26 @@ export type OHLCResponse = {
   ];
 } & { last: number };
 
-export type AssetPairResponse = { [id: string]: IAssetPair };
+export type AssetPairResponse = { [tickerPair: string]: IAssetPair };
 
 export type TimeResponse = { unixtime: number; rfc1123: string };
 
 export type TickerResponse = {
-  [id: string]: ITicker;
+  [tickerPair: string]: ITicker;
 };
 
-export type AssetResponse = { [id: string]: IAsset };
+export type AssetResponse = { [tickerPair: string]: IAsset };
 
 export type LedgerResponse = {
   ledger: {
-    [id: string]: ILedger;
+    [tickerPair: string]: ILedger;
   };
   count: number;
 };
 
 export type TradesHistoryResponse = {
   trades: {
-    [id: string]: ITrade;
+    [tickerPair: string]: ITrade;
   };
   count: number;
 };

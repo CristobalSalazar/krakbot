@@ -31,7 +31,7 @@ class KrakenAPI {
       res = await this.kraken.api(endpoint);
     }
     if (res.error.length > 0) {
-      console.error("api error", res.error);
+      console.error("api error:", res.error);
       return null;
     } else {
       return res.result;
