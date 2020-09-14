@@ -1,5 +1,5 @@
 import { getDb, closeConnection } from "./db/mongo";
-import api from "./kraken/api";
+import api from "./api";
 import { Db } from "mongodb";
 import { TICKER_POLL_INTERVAL, WATCHLIST } from "./config";
 

@@ -1,4 +1,4 @@
-import api from "./api";
+import api from ".";
 describe("Testing public api", () => {
   it("Should get the server time", async () => {
     const res = await api.getServerTime();

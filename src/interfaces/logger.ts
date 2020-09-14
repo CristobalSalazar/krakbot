@@ -1,4 +1,4 @@
-import api from "../kraken/api";
+import api from "../api";
 
 class Logger {
   async price(ticker: string) {}
