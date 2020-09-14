@@ -1,0 +1,9 @@
+Script started on Mon Sep 14 11:22:11 2020
+^C
+[1m[7m%[27m[1m[0m                                                                                                                                                                                                                                              [0m[27m[24m[Jcristobal@Cristobals-Pro krakbot % [K[?2004hc sscripts[?2004l
+zsh: command not found: scripts
+[1m[7m%[27m[1m[0m                                                                                                                                                                                                                                              [0m[27m[24m[Jcristobal@Cristobals-Pro krakbot % [K[?2004hlls[?2004l
+dist		jest.config.js	node_modules	package.json	scripts		src		tsconfig.json	typescript	yarn-error.log	yarn.lock
+[1m[7m%[27m[1m[0m                                                                                                                                                                                                                                              [0m[27m[24m[Jcristobal@Cristobals-Pro krakbot % [K[?2004heexit[?2004l
+
+Script done on Mon Sep 14 11:22:16 2020
