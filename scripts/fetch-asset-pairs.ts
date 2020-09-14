@@ -11,7 +11,10 @@ async function main() {
   const assetPairs = _.values(filtered);
   const uri = path.join(__dirname, "../src", "util", "asset-pairs.ts");
   const contents = assetPairs
-    .map(p => `export const ${p.replace(/\./, "_").toUpperCase()} = "${p}";`)
+    .map(
+      (pair) =>
+        `export const ${pair.replace(/\./, "_").toUpperCase()} = "${pair}";`
+    )
     .join("\n");
   fs.writeFileSync(uri, contents);
 }
