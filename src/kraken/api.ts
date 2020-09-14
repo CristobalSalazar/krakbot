@@ -1,21 +1,12 @@
 // @ts-ignore
 import KrakenClient from "kraken-api";
 import { API_KEY, API_SECRET } from "../config";
-import {
-  ClosedOrdersResponse,
-  OpenOrdersResponse,
-  TradeBalanceResponse,
-  AccountBalanceResponse,
-  AssetResponse,
-  TimeResponse,
-  AssetPairResponse,
-  OrderBookResponse,
-  RecentTradesResponse,
-  RecentSpreadResponse,
-} from "./responses";
+import * as Opts from "./opts";
+import * as Res from "./res";
 import { tickerAdapter, ohlcAdapter, OHLCData } from "./adapters";
 
 type KrakenApiResponse = { result: any; error: any[] };
+
 class KrakenAPI {
   private kraken: KrakenClient;
 
@@ -23,7 +14,7 @@ class KrakenAPI {
     this.kraken = new KrakenClient(pubkey, privatekey);
   }
 
-  async fetch(endpoint: string, opts?: any): Promise<any | null> {
+  async api(endpoint: string, opts?: any): Promise<any | null> {
     let res: KrakenApiResponse;
     if (opts) {
       res = await this.kraken.api(endpoint, opts);
@@ -31,171 +22,137 @@ class KrakenAPI {
       res = await this.kraken.api(endpoint);
     }
     if (res.error.length > 0) {
-      console.error("api error:", res.error);
+      console.error("api error! :", res.error);
       return null;
     } else {
       return res.result;
     }
   }
 
-  public = {
-    getServerTime: async (): Promise<TimeResponse> => {
-      return await this.fetch("Time");
-    },
-    getAssetInfo: async (opts?: {
-      info?: string;
-      aclass?: string;
-      asset?: string;
-    }): Promise<AssetResponse> => {
-      return await this.fetch("Assets", opts);
-    },
-    getTradableAssetPairs: async (opts: {
-      info?: "info" | "leverage" | "fees" | "margin";
-      pair?: string;
-    }): Promise<AssetPairResponse> => {
-      return await this.fetch("AssetPairs", opts);
-    },
-    getTickerInfo: async (pairs: string[]) => {
-      const res = await this.fetch("Ticker", { pair: pairs.join(",") });
-      if (res) {
-        const tickerInfo = tickerAdapter(res);
-        return tickerInfo;
-      }
-    },
-    getOHLCData: async (opts: {
-      pair: string;
-      interval?: number;
-      since?: string;
-    }): Promise<OHLCData> => {
-      const res = await this.fetch("OHLC", opts);
-      if (res) {
-        const ohlc = ohlcAdapter(res);
-        return ohlc;
-      }
-    },
-    getOrderBook: async (opts: {
-      pair: string;
-      count?: number;
-    }): Promise<OrderBookResponse> => {
-      return await this.fetch("Depth", opts);
-    },
-    getRecentTrades: async (opts: {
-      pair: string;
-      since?: string;
-    }): Promise<RecentTradesResponse> => {
-      return await this.fetch("Trades", opts);
-    },
-    getRecentSpread: async (opts: {
-      pair: string;
-      since?: string;
-    }): Promise<RecentSpreadResponse> => {
-      return await this.fetch("Spread", opts);
-    },
-  };
-
-  private = {};
-
-  // Private
-  async getAccountBalance(): Promise<AccountBalanceResponse> {
-    const res = await this.kraken.api("Balance");
-    return res.result;
+  async getServerTime(): Promise<Res.TimeResponse> {
+    return await this.api("Time");
   }
 
-  async getTradeBalance(opts: {
-    aclass?: string;
-    asset?: string;
-  }): Promise<TradeBalanceResponse> {
-    const res = await this.kraken.api("TradeBalance", opts);
-    return res.result;
+  async getAssetInfo(opts?: Opts.AssetsOpts): Promise<Res.AssetsResponse> {
+    return await this.api("Assets", opts);
   }
 
-  async getOpenOrders(opts: {
-    trades?: boolean;
-    userref?: string;
-  }): Promise<OpenOrdersResponse> {
-    const res = await this.kraken.api("OpenOrders", opts);
-    return res.result;
+  async getTradableAssetPairs(
+    opts: Opts.AssetPairsOpts
+  ): Promise<Res.AssetPairResponse> {
+    return await this.api("AssetPairs", opts);
   }
 
-  async getClosedOrders(opts: {
-    trades?: boolean;
-    userref?: string;
-    start?: number;
-    end?: number;
-    ofs?: number;
-    closetime?: "open" | "close";
-  }): Promise<ClosedOrdersResponse> {
-    const res = await this.kraken.api("ClosedOrders", opts);
-    return res.result;
+  async getTickerInfo(pairs: string[]) {
+    const res = await this.api("Ticker", { pair: pairs.join(",") });
+    if (res) {
+      const tickerInfo = tickerAdapter(res);
+      return tickerInfo;
+    }
   }
 
-  // TODO: add return type
-  async queryOrdersInfo(opts: {
-    txid: string;
-    trades?: boolean;
-    userref?: string;
-  }) {
-    const res = await this.kraken.api("QueryOrders", opts);
-    return res.result;
+  async getOHLCData(opts: Opts.OHLCOpts): Promise<OHLCData> {
+    const res = await this.api("OHLC", opts);
+    if (res) {
+      const ohlc = ohlcAdapter(res);
+      return ohlc;
+    }
   }
 
-  // get trade history for item
-  async getTradesHistory(opts: {
-    type?:
-      | "all"
-      | "any position"
-      | "closed position"
-      | "closing position"
-      | "no position";
-    trades?: boolean;
-    start?: number;
-    end?: number;
-    ofs?: number;
-  }) {
-    const res = await this.kraken.api("TradesHistory", opts);
-    return res.result;
+  async getOrderBook(opts: Opts.DepthOpts): Promise<Res.DepthResponse> {
+    return await this.api("Depth", opts);
   }
 
-  async queryTradesInfo(opts: { txid?: string; trades?: boolean }) {
-    const res = await this.kraken.api("QueryTrades", opts);
-    return res.result;
+  async getRecentTrades(opts: Opts.TradesOpts): Promise<Res.TradesResponse> {
+    return await this.api("Trades", opts);
   }
 
-  async getOpenPositions(opts: {
-    txid: string;
-    docalcs?: boolean;
-    consolidartion?: { market: string };
-  }) {
-    const res = await this.kraken.api("OpenPositions", opts);
-    return res.result;
+  async getRecentSpread(opts: Opts.SpreadOpts): Promise<Res.SpreadResponse> {
+    return await this.api("Spread", opts);
   }
 
-  async getLedgersInfo(opts: {
-    aclass?: string;
-    asset?: string;
-    start?: number;
-    end?: number;
-    ofs?: number;
-  }) {
-    const res = await this.kraken.api("Ledgers", opts);
-    return res.result;
+  async getAccountBalance(): Promise<Res.BalanceResponse> {
+    return await this.api("Balance");
   }
 
-  async queryLedgers(opts: {}) {}
+  async getTradeBalance(
+    opts: Opts.TradeBalanceOpts
+  ): Promise<Res.TradeBalanceResponse> {
+    return await this.api("TradeBalance", opts);
+  }
 
-  async getTradeVolume(opts: {}) {}
+  async getOpenOrders(
+    opts: Opts.OpenOrdersOpts
+  ): Promise<Res.OpenOrdersResponse> {
+    return await this.api("OpenOrders", opts);
+  }
 
-  async requestExportReport(opts: {}) {}
+  async getClosedOrders(
+    opts: Opts.ClosedOrdersOpts
+  ): Promise<Res.ClosedOrdersResponse> {
+    return await this.api("ClosedOrders", opts);
+  }
 
-  async getExportStatuses() {}
+  // TODO: Add return type
+  async queryOrdersInfo(opts: Opts.QueryOrdersOpts) {
+    return await this.api("QueryOrders", opts);
+  }
 
-  async getExportReport() {}
+  // TODO: Add return type
+  async getTradesHistory(opts: Opts.TradesHistoryOpts) {
+    return await this.api("TradesHistory", opts);
+  }
 
-  async removeExportReport() {}
-  // Private user trading
-  async addStandardOrder() {}
+  // TODO: Add return type
+  async queryTradesInfo(opts: Opts.QueryTradesOpts) {
+    return await this.api("QueryTrades", opts);
+  }
+
+  // TODO: Add return type
+  async getOpenPositions(opts: Opts.OpenPositionsOpts) {
+    return await this.api("OpenPositions", opts);
+  }
+
+  async getLedgersInfo(opts: Opts.LedgersOpts): Promise<Res.LedgersResponse> {
+    return await this.api("Ledgers", opts);
+  }
+
+  async queryLedgers(id: string[]): Promise<Res.QueryLedgersResponse> {
+    return await this.api("QueryLedgers", { id: id.join(",") });
+  }
+
+  async getTradeVolume(
+    opts: Opts.TradeVolumeOpts
+  ): Promise<Res.TradeVolumeResponse> {
+    return await this.api("TradeVolume", opts);
+  }
+
+  // TODO: Add return type
+  async requestExportReport(opts: Opts.AddExportOpts) {
+    return await this.api("AddExport", opts);
+  }
+
+  // TODO: Add return type
+  async getExportStatuses(opts: Opts.ExportStatusOpts) {
+    return await this.api("ExportStatus", opts);
+  }
+
+  // TODO: Add return type
+  async getExportReport(opts: Opts.RetrieveExportOpts) {
+    return await this.api("RetrieveExport", opts);
+  }
+
+  // TODO: Add return type
+  async removeExportReport(opts: Opts.RemoveExportOpts) {
+    return await this.api("RemoveExport", opts);
+  }
+
+  // TODO: Add return type
+  async addStandardOrder(opts: Opts.AddOrderOpts) {
+    return await this.api("AddOrder", opts);
+  }
+
   async cancelOpenOrder() {}
-  // Private user funding
   async getDepositMethods() {}
   async getDepositAddresses() {}
   async getDepositStatus() {}
