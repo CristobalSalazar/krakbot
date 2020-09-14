@@ -4,6 +4,7 @@ import ILedger from "../interfaces/ILedger";
 import ITrade from "../interfaces/ITrade";
 import IAssetPair from "../interfaces/IAssetPair";
 
+export type KrakenApiResponse = { result: any; error: any[] };
 export type TradeVolumeResponse = {
   currency: string;
   volume: string;

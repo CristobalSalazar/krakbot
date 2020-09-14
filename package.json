@@ -7,10 +7,15 @@
     "fetch-asset-pairs": "ts-node scripts/fetchAssetPairs.ts",
     "start": "yarn build && node dist/src/main.js",
     "build": "tsc",
-    "test": "jest --watch"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "Kraken",
+    "Trading",
+    "Bot"
+  ],
+  "author": "Cristobal Salazar",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.19.2",

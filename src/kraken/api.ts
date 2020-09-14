@@ -5,28 +5,18 @@ import * as Opts from "./opts";
 import * as Res from "./res";
 import { tickerAdapter, ohlcAdapter, OHLCData } from "./adapters";
 
-type KrakenApiResponse = { result: any; error: any[] };
-
-class KrakenAPI {
+class KrakenApi {
   private kraken: KrakenClient;
 
   constructor(pubkey: string, privatekey: string) {
     this.kraken = new KrakenClient(pubkey, privatekey);
   }
 
-  async api(endpoint: string, opts?: any): Promise<any | null> {
-    let res: KrakenApiResponse;
-    if (opts) {
-      res = await this.kraken.api(endpoint, opts);
-    } else {
-      res = await this.kraken.api(endpoint);
-    }
-    if (res.error.length > 0) {
-      console.error("api error! :", res.error);
-      return null;
-    } else {
-      return res.result;
-    }
+  private async api(endpoint: string, opts?: any): Promise<any | null> {
+    const res: Res.KrakenApiResponse = opts
+      ? await this.kraken.api(endpoint, opts)
+      : await this.kraken.api(endpoint);
+    return res.error.length > 0 ? null : res.result;
   }
 
   async getServerTime(): Promise<Res.TimeResponse> {
@@ -94,22 +84,22 @@ class KrakenAPI {
   }
 
   // TODO: Add return type
-  async queryOrdersInfo(opts: Opts.QueryOrdersOpts) {
+  async queryOrdersInfo(opts: Opts.QueryOrdersOpts): Promise<any> {
     return await this.api("QueryOrders", opts);
   }
 
   // TODO: Add return type
-  async getTradesHistory(opts: Opts.TradesHistoryOpts) {
+  async getTradesHistory(opts: Opts.TradesHistoryOpts): Promise<any> {
     return await this.api("TradesHistory", opts);
   }
 
   // TODO: Add return type
-  async queryTradesInfo(opts: Opts.QueryTradesOpts) {
+  async queryTradesInfo(opts: Opts.QueryTradesOpts): Promise<any> {
     return await this.api("QueryTrades", opts);
   }
 
   // TODO: Add return type
-  async getOpenPositions(opts: Opts.OpenPositionsOpts) {
+  async getOpenPositions(opts: Opts.OpenPositionsOpts): Promise<any> {
     return await this.api("OpenPositions", opts);
   }
 
@@ -128,39 +118,76 @@ class KrakenAPI {
   }
 
   // TODO: Add return type
-  async requestExportReport(opts: Opts.AddExportOpts) {
+  async requestExportReport(opts: Opts.AddExportOpts): Promise<any> {
     return await this.api("AddExport", opts);
   }
 
   // TODO: Add return type
-  async getExportStatuses(opts: Opts.ExportStatusOpts) {
+  async getExportStatuses(opts: Opts.ExportStatusOpts): Promise<any> {
     return await this.api("ExportStatus", opts);
   }
 
   // TODO: Add return type
-  async getExportReport(opts: Opts.RetrieveExportOpts) {
+  async getExportReport(opts: Opts.RetrieveExportOpts): Promise<any> {
     return await this.api("RetrieveExport", opts);
   }
 
   // TODO: Add return type
-  async removeExportReport(opts: Opts.RemoveExportOpts) {
+  async removeExportReport(opts: Opts.RemoveExportOpts): Promise<any> {
     return await this.api("RemoveExport", opts);
   }
 
   // TODO: Add return type
-  async addStandardOrder(opts: Opts.AddOrderOpts) {
+  async addStandardOrder(opts: Opts.AddOrderOpts): Promise<any> {
     return await this.api("AddOrder", opts);
   }
 
-  async cancelOpenOrder() {}
-  async getDepositMethods() {}
-  async getDepositAddresses() {}
-  async getDepositStatus() {}
-  async getWithdrawlInfo() {}
-  async withdrawFunds() {}
-  async getWithdrawStatus() {}
-  async requestWithdrawlCancelation() {}
-  async walletTransfer() {}
+  // TODO: Add return type
+  async cancelOpenOrder(opts: Opts.CancelOrderOpts): Promise<any> {
+    return await this.api("CancelOrder", opts);
+  }
+
+  // TODO: Add return type
+  async getDepositMethods(opts: Opts.DepositMethodsOpts): Promise<any> {
+    return await this.api("DepositMethods", opts);
+  }
+
+  // TODO: Add return type
+  async getDepositAddresses(opts: Opts.DepositAddressesOpts): Promise<any> {
+    return await this.api("DepositAddresses", opts);
+  }
+
+  // TODO: Add return type
+  async getDepositStatus(opts: Opts.DepositStatusOpts): Promise<any> {
+    return await this.api("DepositStatus", opts);
+  }
+
+  // TODO: Add return type
+  async getWithdrawlInfo(opts: Opts.WithdrawInfoOpts): Promise<any> {
+    return await this.api("WithdrawInfo", opts);
+  }
+
+  // TODO: Add return type
+  async withdrawFunds(opts: Opts.WithdrawOpts): Promise<any> {
+    return await this.api("Withdraw", opts);
+  }
+
+  // TODO: Add return type
+  async getWithdrawStatus(opts: Opts.WithdrawStatusOpts): Promise<any> {
+    return await this.api("WithdrawStatus", opts);
+  }
+
+  // TODO: Add return type
+  async requestWithdrawlCancelation(
+    opts: Opts.WithdrawCancelOpts
+  ): Promise<any> {
+    return await this.api("WithdrawCancel", opts);
+  }
+
+  // TODO: Add return type
+  async walletTransfer(opts: Opts.WalletTransferOpts): Promise<any> {
+    return await this.api("WalletTransfer", opts);
+  }
 }
 
-export default new KrakenAPI(API_KEY, API_SECRET);
+export default new KrakenApi(API_KEY, API_SECRET);

@@ -1,3 +1,12 @@
+export type WalletTransferOpts = Asset & Amount & WalletTransfer;
+export type WithdrawCancelOpts = OptionalAssetClass & Asset & RefId;
+export type WithdrawStatusOpts = OptionalAssetClass & Asset & Method;
+export type WithdrawOpts = OptionalAssetClass & Asset & Key & Amount;
+export type WithdrawInfoOpts = OptionalAssetClass & Asset & Key & Amount;
+export type DepositStatusOpts = OptionalAssetClass & Asset & Method;
+export type DepositAddressesOpts = OptionalAssetClass & Asset & Method & New;
+export type DepositMethodsOpts = OptionalAssetClass & Asset;
+export type CancelOrderOpts = TransactionId;
 export type RemoveExportOpts = RemoveType & Id;
 export type RetrieveExportOpts = Id;
 export type ExportStatusOpts = ReportType;
@@ -21,14 +30,8 @@ export type QueryTradesOpts = OptionalTransactionId & OptionalTrades;
 export type TradesHistoryOpts = OptionalTrades &
   OptionalStart &
   OptionalEnd &
-  OptionalOffset & {
-    type?:
-      | "all"
-      | "any position"
-      | "closed position"
-      | "closing position"
-      | "no position";
-  };
+  OptionalOffset &
+  OptionalTradeType;
 export type OHLCOpts = OptionalInterval & OptionalSince & OptionalPair;
 export type AssetPairsOpts = {
   info?: "info" | "leverage" | "fees" | "margin";
@@ -47,26 +50,45 @@ export type SpreadOpts = Pair & OptionalSince;
 export type DepthOpts = Pair & OptionalCount;
 export type TradeBalanceOpts = OptionalAssetClass & OptionalAsset;
 export type AddOrderOpts = Pair &
-  OptionalUserRef & {
-    type: StandardOrderType;
-    ordertype: OrderType;
-    volume: string;
-    price?: string;
-    price2?: string;
-    leverage?: string;
+  Volume &
+  StandardOrderType &
+  OptionalUserRef &
+  OptionalPrice &
+  OptionalSecondaryPrice &
+  OptionalLeverage &
+  OptionalStartTime &
+  OrderType & {
     oflags?: string;
-    starttm?: number;
     expiretm?: number;
     validate?: boolean;
   };
 
 // Subtypes
+type Volume = { volume: string };
+type OptionalPrice = { price?: string };
+type OptionalSecondaryPrice = { price2?: string };
+type OptionalLeverage = { leverage?: string };
+type WalletTransfer = { to: string; from: string };
+type RefId = { refid: string };
+type Asset = { asset: string };
 type Id = { id: string };
+type Key = { key: string };
+type Amount = { amount: string };
+type Method = { method: string };
+type New = { new: boolean };
 type RemoveType = { type: "cancel" | "delete" };
 type ReportType = { report: "trades" | "ledgers" };
 type TransactionId = { txid: string };
 type Description = { description: string };
 type Pair = { pair: string };
+type OptionalTradeType = {
+  type?:
+    | "all"
+    | "any position"
+    | "closed position"
+    | "closing position"
+    | "no position";
+};
 type OptionalFormat = { format?: "CSV" | "TSV" };
 type OptionalFields = { fields?: string };
 type OptionalStartTime = { starttm?: number };
@@ -87,16 +109,18 @@ type OptionalAsset = { asset?: string };
 type OptionalInterval = { interval?: number };
 type OptionalSince = { since?: number };
 type OptionalCount = { count?: number };
-type StandardOrderType = "buy" | "sell";
-type OrderType =
-  | "market"
-  | "limit"
-  | "stop-loss"
-  | "take-profit"
-  | "stop-loss-profit"
-  | "stop-loss-limit"
-  | "take-profit-limit"
-  | "trailing-stop"
-  | "trailing-stop-limit"
-  | "stop-loss-and-limit"
-  | "settle-position";
+type StandardOrderType = { type: "buy" | "sell" };
+type OrderType = {
+  ordertype:
+    | "market"
+    | "limit"
+    | "stop-loss"
+    | "take-profit"
+    | "stop-loss-profit"
+    | "stop-loss-limit"
+    | "take-profit-limit"
+    | "trailing-stop"
+    | "trailing-stop-limit"
+    | "stop-loss-and-limit"
+    | "settle-position";
+};
