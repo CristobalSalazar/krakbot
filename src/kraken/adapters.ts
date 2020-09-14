@@ -1,10 +1,6 @@
-import {
-  AccountBalanceResponse,
-  TickerResponse,
-  OHLCResponse,
-} from "./responses";
+import { BalanceResponse, TickerResponse, OHLCResponse } from "./res";
 
-export function accountBalanceAdapter(res: AccountBalanceResponse) {
+export function accountBalanceAdapter(res: BalanceResponse) {
   const out: { [assetName: string]: number } = {};
   for (let key in res) {
     out[key] = parseFloat(res[key]);
