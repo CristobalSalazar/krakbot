@@ -32,7 +32,7 @@ export type TradesHistoryOpts = OptionalTrades &
   OptionalEnd &
   OptionalOffset &
   OptionalTradeType;
-export type OHLCOpts = OptionalInterval & OptionalSince & OptionalPair;
+export type OHLCOpts = Pair & OptionalInterval & OptionalSince;
 export type AssetPairsOpts = {
   info?: "info" | "leverage" | "fees" | "margin";
 } & OptionalPair;
@@ -48,7 +48,7 @@ export type AssetsOpts = { info?: string } & OptionalAsset & OptionalAssetClass;
 export type TradesOpts = Pair & OptionalSince;
 export type SpreadOpts = Pair & OptionalSince;
 export type DepthOpts = Pair & OptionalCount;
-export type TradeBalanceOpts = OptionalAssetClass & OptionalAsset;
+export type TradeBalanceOpts = OptionalAssetClass & Asset;
 export type AddOrderOpts = Pair &
   Volume &
   StandardOrderType &
@@ -81,6 +81,7 @@ type ReportType = { report: "trades" | "ledgers" };
 type TransactionId = { txid: string };
 type Description = { description: string };
 type Pair = { pair: string };
+type Interval = 1 | 5 | 15 | 30 | 60 | 240 | 1440 | 10080 | 21600;
 type OptionalTradeType = {
   type?:
     | "all"
@@ -106,7 +107,7 @@ type OptionalUserRef = { userref?: string };
 type OptionalPair = { pair?: string };
 type OptionalAssetClass = { aclass?: string };
 type OptionalAsset = { asset?: string };
-type OptionalInterval = { interval?: number };
+type OptionalInterval = { interval?: Interval };
 type OptionalSince = { since?: number };
 type OptionalCount = { count?: number };
 type StandardOrderType = { type: "buy" | "sell" };

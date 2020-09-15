@@ -1,4 +1,4 @@
-import { BalanceResponse, TickerResponse, OHLCResponse } from "./res";
+import { BalanceResponse, TickerResponse, OHLCResponse } from "./responses";
 
 export function accountBalanceAdapter(res: BalanceResponse) {
   const out: { [assetName: string]: number } = {};
@@ -125,6 +125,6 @@ export function ohlcAdapter(res: OHLCResponse): OHLCData {
     }
     out[key] = outArr;
   }
-  out.last = res["last"];
+  //out.last = res["last"];
   return out;
 }
