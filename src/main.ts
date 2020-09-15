@@ -1,31 +1,13 @@
 import { getDb, closeConnection } from "./db/mongo";
 import api from "./api";
-import { Db } from "mongodb";
-import { TICKER_POLL_INTERVAL, WATCHLIST } from "./config";
+import { DOTETH } from "./util/asset-pairs";
 
 async function main() {
   try {
-    const db = await getDb();
-    startPolling(db);
+    const res = await api.getTickerInfo([DOTETH]);
+    console.log(JSON.stringify(res, null, 2));
   } catch (err) {
     console.error(err);
   }
 }
 main();
-
-function startPolling(database: Db) {
-  pollTickerInfo(database);
-  setInterval(async () => {
-    await pollTickerInfo(database);
-  }, TICKER_POLL_INTERVAL);
-}
-
-async function pollTickerInfo(db: Db) {
-  const results = await api.getTickerInfo(WATCHLIST);
-  db.collection("ticker_info").insertMany(
-    results.map((i) => {
-      i.timestamp = new Date();
-      return i;
-    })
-  );
-}

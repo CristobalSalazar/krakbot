@@ -1,9 +1,8 @@
 // @ts-ignore
 import KrakenClient from "kraken-api";
 import { API_KEY, API_SECRET } from "../config";
-import * as Opts from "./opts";
-import * as Res from "./res";
-import { tickerAdapter, ohlcAdapter, OHLCData } from "./adapters";
+import * as Opts from "./options";
+import * as Res from "./responses";
 
 class KrakenApi {
   private kraken: KrakenClient;
@@ -19,6 +18,7 @@ class KrakenApi {
     return res.error.length > 0 ? null : res.result;
   }
 
+  // public user methods
   async getServerTime(): Promise<Res.TimeResponse> {
     return await this.api("Time");
   }
@@ -28,25 +28,17 @@ class KrakenApi {
   }
 
   async getTradableAssetPairs(
-    opts: Opts.AssetPairsOpts
+    opts?: Opts.AssetPairsOpts
   ): Promise<Res.AssetPairResponse> {
     return await this.api("AssetPairs", opts);
   }
 
-  async getTickerInfo(pairs: string[]) {
-    const res = await this.api("Ticker", { pair: pairs.join(",") });
-    if (res) {
-      const tickerInfo = tickerAdapter(res);
-      return tickerInfo;
-    }
+  async getTickerInfo(pairs: string[]): Promise<Res.TickerResponse> {
+    return await this.api("Ticker", { pair: pairs.join(",") });
   }
 
-  async getOHLCData(opts: Opts.OHLCOpts): Promise<OHLCData> {
-    const res = await this.api("OHLC", opts);
-    if (res) {
-      const ohlc = ohlcAdapter(res);
-      return ohlc;
-    }
+  async getOHLCData(opts?: Opts.OHLCOpts): Promise<Res.OHLCResponse> {
+    return await this.api("OHLC", opts);
   }
 
   async getOrderBook(opts: Opts.DepthOpts): Promise<Res.DepthResponse> {
@@ -61,6 +53,7 @@ class KrakenApi {
     return await this.api("Spread", opts);
   }
 
+  // Private user methods
   async getAccountBalance(): Promise<Res.BalanceResponse> {
     return await this.api("Balance");
   }
