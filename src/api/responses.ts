@@ -1,6 +1,3 @@
-import ILedger from "../interfaces/ILedger";
-import ITrade from "../interfaces/ITrade";
-
 export type KrakenApiResponse = { result: any; error: any[] };
 export type TimeResponse = { unixtime: number; rfc1123: string };
 export type AssetsResponse = TickerPair<AssetInfo>;
@@ -25,63 +22,61 @@ export type TradeBalanceResponse = {
   ml: string;
 };
 export type OpenOrdersResponse = {
-  open: TickerPair<OpenOrdersInfo>;
-};
-
-export type QueryLedgersResponse = { [tickerpair: string]: ILedger };
-export type LedgersResponse = {
-  ledger: {
-    [tickerPair: string]: ILedger;
-  };
+  open: Id<OrdersInfo>;
   count: number;
 };
+export type ClosedOrdersResponse = {
+  closed: Id<OrdersInfo>;
+  count: number;
+};
+export type QueryOrdersResponse = Id<OrdersInfo>;
 export type TradesHistoryResponse = {
-  trades: {
-    [tickerPair: string]: ITrade;
-  };
+  trades: Id<TradeHistoryInfo>;
   count: number;
 };
+export type QueryTradesResponse = Id<TradeHistoryInfo>;
+export type OpenPositionsResponse = Id<OpenPositionInfo>;
+export type LedgersResponse = {
+  ledger: Id<LedgerInfo>;
+  count: number;
+};
+export type QueryLedgersResponse = Id<LedgerInfo>;
 export type TradeVolumeResponse = {
   currency: string;
   volume: string;
   fees: TickerPair<FeeInfo>;
   fees_maker: TickerPair<FeeInfo>;
 };
-export type ClosedOrdersResponse = {
-  closed: {
-    [tickerPair: string]: {
-      refid?: string;
-      userref: number;
-      status: string;
-      reason?: string;
-      openttm: number;
-      closetm: number;
-      starttm: number;
-      expiretm: number;
-      descr: {
-        pair: string;
-        type: string;
-        ordertype: string;
-        price: string;
-        price2: string;
-        leverage: string;
-        order: string;
-        close: string;
-      };
-      vol: string;
-      vol_exec: string;
-      cost: string;
-      fee: string;
-      price: string;
-      stopprice: string;
-      limitprice: string;
-      misc: string;
-      offlags: string;
-    };
-  };
-  count: number;
+
+type OpenPositionInfo = {};
+type LedgerInfo = {
+  refid: string;
+  time: number;
+  type: string;
+  subtype: string;
+  aclass: string;
+  asset: string;
+  amount: string;
+  fee: string;
+  balance: string;
 };
-type OpenOrdersInfo = {
+
+type TradeHistoryInfo = {
+  ordertxid: string;
+  postxid: string;
+  pair: string;
+  time: number;
+  type: string;
+  ordertype: string;
+  price: string;
+  cost: string;
+  fee: string;
+  vol: string;
+  margin: string;
+  misc: string;
+};
+type Id<T> = { [id: string]: T };
+type OrdersInfo = {
   refid?: string;
   userref: number;
   status: string;
@@ -108,7 +103,6 @@ type OpenOrdersInfo = {
   misc: string;
   offlags: string;
 };
-
 type TradesInfo = [
   price: string,
   volume: string,
@@ -158,7 +152,6 @@ type FeeInfo = {
   nextvolume: string;
   tiervolume: string;
 };
-
 // Internal Types
 type DepthInfo = {
   asks: [price: string, volume: string, timestamp: number];

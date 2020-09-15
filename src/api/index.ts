@@ -1,14 +1,13 @@
 // @ts-ignore
 import KrakenClient from "kraken-api";
-import { API_KEY, API_SECRET } from "../config";
 import * as Opts from "./options";
 import * as Res from "./responses";
 
-class KrakenApi {
+export default class KrakenApi {
   private kraken: KrakenClient;
 
-  constructor(pubkey: string, privatekey: string) {
-    this.kraken = new KrakenClient(pubkey, privatekey);
+  constructor(publicKey: string, privateKey: string) {
+    this.kraken = new KrakenClient(publicKey, privateKey);
   }
 
   private async api(endpoint: string, opts?: any): Promise<any | null> {
@@ -76,23 +75,27 @@ class KrakenApi {
     return await this.api("ClosedOrders", opts);
   }
 
-  // TODO: Add return type
-  async queryOrdersInfo(opts: Opts.QueryOrdersOpts): Promise<any> {
+  async queryOrdersInfo(
+    opts: Opts.QueryOrdersOpts
+  ): Promise<Res.QueryOrdersResponse> {
     return await this.api("QueryOrders", opts);
   }
 
-  // TODO: Add return type
-  async getTradesHistory(opts: Opts.TradesHistoryOpts): Promise<any> {
+  async getTradesHistory(
+    opts: Opts.TradesHistoryOpts
+  ): Promise<Res.TradesHistoryResponse> {
     return await this.api("TradesHistory", opts);
   }
 
-  // TODO: Add return type
-  async queryTradesInfo(opts: Opts.QueryTradesOpts): Promise<any> {
+  async queryTradesInfo(
+    opts: Opts.QueryTradesOpts
+  ): Promise<Res.QueryTradesResponse> {
     return await this.api("QueryTrades", opts);
   }
 
-  // TODO: Add return type
-  async getOpenPositions(opts: Opts.OpenPositionsOpts): Promise<any> {
+  async getOpenPositions(
+    opts: Opts.OpenPositionsOpts
+  ): Promise<Res.OpenPositionsResponse> {
     return await this.api("OpenPositions", opts);
   }
 
@@ -182,5 +185,3 @@ class KrakenApi {
     return await this.api("WalletTransfer", opts);
   }
 }
-
-export default new KrakenApi(API_KEY, API_SECRET);

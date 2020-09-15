@@ -26,7 +26,7 @@ export type LedgersOpts = OptionalAssetClass &
   OptionalStart &
   OptionalEnd &
   OptionalOffset;
-export type QueryTradesOpts = OptionalTransactionId & OptionalTrades;
+export type QueryTradesOpts = TransactionId & OptionalTrades;
 export type TradesHistoryOpts = OptionalTrades &
   OptionalStart &
   OptionalEnd &
