@@ -1,7 +1,10 @@
-import api from "api";
+import KrakenApi from "../api";
 import _ from "lodash";
 import fs from "fs";
 import path from "path";
+import { API_KEY, API_SECRET } from "../config";
+
+const api = new KrakenApi(API_KEY, API_SECRET);
 
 async function main() {
   const res = await api.getTradableAssetPairs({});

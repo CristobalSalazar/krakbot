@@ -3,18 +3,16 @@ import { CONNECTION_STRING, DB_NAME } from "../config";
 var client: MongoClient | null = null;
 
 export async function getDb(): Promise<Db> {
-  const connectionString = CONNECTION_STRING;
-  const dbName = DB_NAME;
   if (client !== null) {
-    return client.db(dbName);
+    return client.db(DB_NAME);
   }
   try {
-    client = await MongoClient.connect(connectionString, {
+    client = await MongoClient.connect(CONNECTION_STRING, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
     console.log("Successfully connected to db...");
-    return client.db(dbName);
+    return client.db(DB_NAME);
   } catch (err) {
     console.error("Unable to connect to database", err);
     process.exit(1);

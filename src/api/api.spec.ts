@@ -1,4 +1,4 @@
-import { API_KEY, API_SECRET } from "config";
+import { API_KEY, API_SECRET } from "../config";
 import KrakenApi from ".";
 const api = new KrakenApi(API_KEY, API_SECRET);
 

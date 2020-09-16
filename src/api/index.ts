@@ -4,16 +4,16 @@ import * as Opts from "./options";
 import * as Res from "./responses";
 
 export default class KrakenApi {
-  private kraken: KrakenClient;
+  private client: KrakenClient;
 
-  constructor(publicKey: string, privateKey: string) {
-    this.kraken = new KrakenClient(publicKey, privateKey);
+  constructor(pub: string, secret: string) {
+    this.client = new KrakenClient(pub, secret);
   }
 
   private async api(endpoint: string, opts?: any): Promise<any | null> {
     const res: Res.KrakenApiResponse = opts
-      ? await this.kraken.api(endpoint, opts)
-      : await this.kraken.api(endpoint);
+      ? await this.client.api(endpoint, opts)
+      : await this.client.api(endpoint);
     return res.error.length > 0 ? null : res.result;
   }
 
@@ -113,28 +113,32 @@ export default class KrakenApi {
     return await this.api("TradeVolume", opts);
   }
 
-  // TODO: Add return type
-  async requestExportReport(opts: Opts.AddExportOpts): Promise<any> {
+  async requestExportReport(
+    opts: Opts.AddExportOpts
+  ): Promise<Res.AddExportResponse> {
     return await this.api("AddExport", opts);
   }
 
-  // TODO: Add return type
-  async getExportStatuses(opts: Opts.ExportStatusOpts): Promise<any> {
+  async getExportStatuses(
+    opts: Opts.ExportStatusOpts
+  ): Promise<Res.ExportStatusResponse> {
     return await this.api("ExportStatus", opts);
   }
 
-  // TODO: Add return type
+  // TODO: Add return type - this returns error as content-type needs to be set in client
   async getExportReport(opts: Opts.RetrieveExportOpts): Promise<any> {
     return await this.api("RetrieveExport", opts);
   }
 
-  // TODO: Add return type
-  async removeExportReport(opts: Opts.RemoveExportOpts): Promise<any> {
+  async removeExportReport(
+    opts: Opts.RemoveExportOpts
+  ): Promise<Res.RemoveExportResponse> {
     return await this.api("RemoveExport", opts);
   }
 
-  // TODO: Add return type
-  async addStandardOrder(opts: Opts.AddOrderOpts): Promise<any> {
+  async addStandardOrder(
+    opts: Opts.AddOrderOpts
+  ): Promise<Res.AddOrderResponse> {
     return await this.api("AddOrder", opts);
   }
 

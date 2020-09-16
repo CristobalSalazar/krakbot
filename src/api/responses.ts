@@ -7,6 +7,10 @@ export type OHLCResponse = TickerPair<OHLCData[]> & Last;
 export type DepthResponse = TickerPair<DepthInfo>;
 export type TradesResponse = TickerPair<TradesInfo[]> & Last;
 export type SpreadResponse = TickerPair<SpreadInfo[]> & Last;
+export type AddOrderResponse = {
+  descr: { order: string };
+  txid: [txid: string];
+};
 export type BalanceResponse = {
   [assetName: string]: string;
 };
@@ -46,6 +50,28 @@ export type TradeVolumeResponse = {
   volume: string;
   fees: TickerPair<FeeInfo>;
   fees_maker: TickerPair<FeeInfo>;
+};
+export type AddExportResponse = { id: string };
+export type ExportStatusResponse = ReportInfo[];
+export type RemoveExportResponse = { delete?: boolean; cancel?: boolean };
+
+type ReportInfo = {
+  id: string;
+  descr: string;
+  format: string;
+  report: string;
+  subtype: string;
+  status: string;
+  flags: string;
+  fields: string;
+  createdtm: string;
+  expiretm: string;
+  starttm: string;
+  completedtm: string;
+  datastarttm: string;
+  dataendtm: string;
+  aclass: string;
+  asset: string;
 };
 
 type OpenPositionInfo = {};
