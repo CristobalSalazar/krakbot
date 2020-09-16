@@ -36,7 +36,7 @@ export default class KrakenApi {
     return await this.api("Ticker", { pair: pairs.join(",") });
   }
 
-  async getOHLCData(opts?: Opts.OHLCOpts): Promise<Res.OHLCResponse> {
+  async getOhlcData(opts?: Opts.OhlcOpts): Promise<Res.OhlcResponse> {
     return await this.api("OHLC", opts);
   }
 
