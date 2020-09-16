@@ -64,13 +64,13 @@ export default class KrakenApi {
   }
 
   async getOpenOrders(
-    opts: Opts.OpenOrdersOpts
+    opts?: Opts.OpenOrdersOpts
   ): Promise<Res.OpenOrdersResponse> {
     return await this.api("OpenOrders", opts);
   }
 
   async getClosedOrders(
-    opts: Opts.ClosedOrdersOpts
+    opts?: Opts.ClosedOrdersOpts
   ): Promise<Res.ClosedOrdersResponse> {
     return await this.api("ClosedOrders", opts);
   }
