@@ -32,7 +32,7 @@ export type TradesHistoryOpts = OptionalTrades &
   OptionalEnd &
   OptionalOffset &
   OptionalTradeType;
-export type OHLCOpts = Pair & OptionalInterval & OptionalSince;
+export type OhlcOpts = Pair & OptionalInterval & OptionalSince;
 export type AssetPairsOpts = {
   info?: "info" | "leverage" | "fees" | "margin";
 } & OptionalPair;

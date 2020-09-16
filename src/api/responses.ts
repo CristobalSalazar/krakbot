@@ -3,7 +3,7 @@ export type TimeResponse = { unixtime: number; rfc1123: string };
 export type AssetsResponse = TickerPair<AssetInfo>;
 export type AssetPairResponse = TickerPair<AssetPair>;
 export type TickerResponse = TickerPair<TickerInfo>;
-export type OHLCResponse = TickerPair<OHLCData[]> & Last;
+export type OhlcResponse = TickerPair<OHLCData[]> & Last;
 export type DepthResponse = TickerPair<DepthInfo>;
 export type TradesResponse = TickerPair<TradesInfo[]> & Last;
 export type SpreadResponse = TickerPair<SpreadInfo[]> & Last;
@@ -152,7 +152,7 @@ type TickerInfo = {
 type Fees = [[volume: string, percentFee: string]];
 type AssetPair = {
   altname: string;
-  wsname: string;
+  wsname?: string;
   aclass_base: string;
   base: string;
   aclass_quote: string;
@@ -164,11 +164,11 @@ type AssetPair = {
   leverage_buy: number[];
   leverage_sell: number[];
   fees: Fees;
-  fees_maker: Fees;
+  fees_maker?: Fees;
   fee_volume_currency: string;
   margin_call: number;
   margin_stop: number;
-  ordermin: string;
+  ordermin?: string;
 };
 type FeeInfo = {
   fee: string;
