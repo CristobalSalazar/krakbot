@@ -180,8 +180,8 @@ type FeeInfo = {
 };
 // Internal Types
 type DepthInfo = {
-  asks: [price: string, volume: string, timestamp: number];
-  bids: [price: string, volume: string, timestamp: number];
+  asks: [[price: string, volume: string, timestamp: number]];
+  bids: [[price: string, volume: string, timestamp: number]];
 };
 type Last = { last: number | string };
 type OHLCData = [

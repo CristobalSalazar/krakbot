@@ -97,14 +97,18 @@ describe("Public Api", () => {
       const info = res[key];
       expect(info.asks).toBeDefined();
       expect(info.bids).toBeDefined();
-      expect(info.asks).toHaveLength(3);
-      expect(info.bids).toHaveLength(3);
-      expect(info.asks[0]).toBeDefined();
-      expect(info.asks[1]).toBeDefined();
-      expect(info.asks[2]).toBeDefined();
-      expect(info.bids[0]).toBeDefined();
-      expect(info.bids[1]).toBeDefined();
-      expect(info.bids[2]).toBeDefined();
+      for (const ask of info.asks) {
+        expect(ask).toHaveLength(3);
+        expect(ask[0]).toBeDefined();
+        expect(ask[1]).toBeDefined();
+        expect(ask[2]).toBeDefined();
+      }
+      for (const bid of info.bids) {
+        expect(bid).toHaveLength(3);
+        expect(bid[0]).toBeDefined();
+        expect(bid[1]).toBeDefined();
+        expect(bid[2]).toBeDefined();
+      }
     }
   });
 
