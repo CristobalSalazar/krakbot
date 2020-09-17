@@ -115,7 +115,7 @@ export type WalletTransferResponse = {
 
 export type CancelOrderResponse = {
   count: number;
-  pending?: string;
+  pending?: Id<OrdersInfo>;
 };
 
 type ReportInfo = {
