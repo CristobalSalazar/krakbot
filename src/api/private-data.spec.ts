@@ -1,7 +1,7 @@
 import KrakenApi from ".";
 import { API_KEY, API_SECRET } from "../config";
 
-describe("Private Api", () => {
+describe("Private Data", () => {
   const api = new KrakenApi(API_KEY, API_SECRET);
 
   it("Should get account balance", async () => {
