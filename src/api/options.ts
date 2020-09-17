@@ -4,7 +4,10 @@ export type WithdrawStatusOpts = OptionalAssetClass & Asset & Method;
 export type WithdrawOpts = OptionalAssetClass & Asset & Key & Amount;
 export type WithdrawInfoOpts = OptionalAssetClass & Asset & Key & Amount;
 export type DepositStatusOpts = OptionalAssetClass & Asset & Method;
-export type DepositAddressesOpts = OptionalAssetClass & Asset & Method & New;
+export type DepositAddressesOpts = OptionalAssetClass &
+  Asset &
+  Method &
+  OptionalNew;
 export type DepositMethodsOpts = OptionalAssetClass & Asset;
 export type CancelOrderOpts = TransactionId;
 export type RemoveExportOpts = RemoveType & Id;
@@ -75,7 +78,7 @@ type Id = { id: string };
 type Key = { key: string };
 type Amount = { amount: string };
 type Method = { method: string };
-type New = { new: boolean };
+type OptionalNew = { new?: boolean };
 type RemoveType = { type: "cancel" | "delete" };
 type ReportType = { report: "trades" | "ledgers" };
 type TransactionId = { txid: string };

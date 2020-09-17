@@ -142,38 +142,43 @@ export default class KrakenApi {
     return await this.api("AddOrder", opts);
   }
 
-  // TODO: Add return type
-  async cancelOpenOrder(opts: Opts.CancelOrderOpts): Promise<any> {
+  async cancelOpenOrder(
+    opts: Opts.CancelOrderOpts
+  ): Promise<Res.CancelOrderResponse> {
     return await this.api("CancelOrder", opts);
   }
 
-  // TODO: Add return type
-  async getDepositMethods(opts: Opts.DepositMethodsOpts): Promise<any> {
+  async getDepositMethods(
+    opts: Opts.DepositMethodsOpts
+  ): Promise<Res.DepositMethodsResponse> {
     return await this.api("DepositMethods", opts);
   }
 
-  // TODO: Add return type
-  async getDepositAddresses(opts: Opts.DepositAddressesOpts): Promise<any> {
+  async getDepositAddresses(
+    opts: Opts.DepositAddressesOpts
+  ): Promise<Res.DepositAdddressesResponse> {
     return await this.api("DepositAddresses", opts);
   }
 
-  // TODO: Add return type
-  async getDepositStatus(opts: Opts.DepositStatusOpts): Promise<any> {
+  async getDepositStatus(
+    opts: Opts.DepositStatusOpts
+  ): Promise<Res.DepositStatusResponse> {
     return await this.api("DepositStatus", opts);
   }
 
-  // TODO: Add return type
-  async getWithdrawlInfo(opts: Opts.WithdrawInfoOpts): Promise<any> {
+  async getWithdrawlInfo(
+    opts: Opts.WithdrawInfoOpts
+  ): Promise<Res.WithdrawInfoResponse> {
     return await this.api("WithdrawInfo", opts);
   }
 
-  // TODO: Add return type
-  async withdrawFunds(opts: Opts.WithdrawOpts): Promise<any> {
+  async withdrawFunds(opts: Opts.WithdrawOpts): Promise<Res.WithdrawResponse> {
     return await this.api("Withdraw", opts);
   }
 
-  // TODO: Add return type
-  async getWithdrawStatus(opts: Opts.WithdrawStatusOpts): Promise<any> {
+  async getWithdrawlStatus(
+    opts: Opts.WithdrawStatusOpts
+  ): Promise<Res.WithdrawStatusResponse> {
     return await this.api("WithdrawStatus", opts);
   }
 
@@ -184,8 +189,9 @@ export default class KrakenApi {
     return await this.api("WithdrawCancel", opts);
   }
 
-  // TODO: Add return type
-  async walletTransfer(opts: Opts.WalletTransferOpts): Promise<any> {
+  async walletTransfer(
+    opts: Opts.WalletTransferOpts
+  ): Promise<Res.WalletTransferResponse> {
     return await this.api("WalletTransfer", opts);
   }
 }

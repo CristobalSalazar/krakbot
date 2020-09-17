@@ -16,7 +16,12 @@ async function main() {
     tickerService: new TickerService(db),
   };
 
-  const res = await api.getOrderBook({ pair: DOTETH });
+  const res = await api.getWithdrawlInfo({
+    asset: "XETH",
+    key: "metamask",
+    amount: "1",
+  });
+
   console.log(JSON.stringify(res, null, 2));
   //setInterval(() => poll(api, services), Time.minutes(1));
 }

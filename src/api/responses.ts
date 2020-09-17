@@ -3,7 +3,7 @@ export type TimeResponse = { unixtime: number; rfc1123: string };
 export type AssetsResponse = TickerPair<AssetInfo>;
 export type AssetPairResponse = TickerPair<AssetPair>;
 export type TickerResponse = TickerPair<TickerInfo>;
-export type OhlcResponse = TickerPair<OHLCData[]> & Last;
+export type OhlcResponse = TickerPair<OhlcData[]> & Last;
 export type DepthResponse = TickerPair<DepthInfo>;
 export type TradesResponse = TickerPair<TradesInfo[]> & Last;
 export type SpreadResponse = TickerPair<SpreadInfo[]> & Last;
@@ -54,6 +54,69 @@ export type TradeVolumeResponse = {
 export type AddExportResponse = { id: string };
 export type ExportStatusResponse = ReportInfo[];
 export type RemoveExportResponse = { delete?: boolean; cancel?: boolean };
+export type DepositMethodsResponse = [
+  {
+    method: string;
+    limit: string | boolean;
+    fee: string;
+    "gen-address": boolean;
+  }
+];
+export type DepositAdddressesResponse = [
+  { address: string; expiretm: number; new: boolean }
+];
+export type DepositStatusResponse = [
+  {
+    method: string;
+    aclass: string;
+    asset: string;
+    refid: string;
+    txid: string;
+    info: string;
+    amount: string;
+    fee: string;
+    time: number;
+    status: string;
+    "status-prop"?: "return" | "onhold";
+  }
+];
+export type WithdrawInfoResponse = [
+  {
+    method: string;
+    limit: string;
+    fee: string;
+  }
+];
+export type WithdrawResponse = {
+  refid: string;
+};
+export type WithdrawStatusResponse = {
+  method: string;
+  aclass: string;
+  asset: string;
+  refid: string;
+  txid: string;
+  info: string;
+  amount: string;
+  fee: string;
+  time: number;
+  status: string;
+  "status-prop"?:
+    | "cancel-pending"
+    | "canceled"
+    | "cancel-denied"
+    | "return"
+    | "onhold";
+};
+
+export type WalletTransferResponse = {
+  refid: string;
+};
+
+export type CancelOrderResponse = {
+  count: number;
+  pending?: string;
+};
 
 type ReportInfo = {
   id: string;
@@ -184,7 +247,7 @@ type DepthInfo = {
   bids: [[price: string, volume: string, timestamp: number]];
 };
 type Last = { last: number | string };
-type OHLCData = [
+type OhlcData = [
   time: number,
   open: string,
   high: string,
