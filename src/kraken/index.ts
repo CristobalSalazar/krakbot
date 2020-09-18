@@ -112,60 +112,50 @@ export default class KrakenApi {
   ): Promise<Res.TradeVolumeResponse> {
     return await this.api("TradeVolume", opts);
   }
-
   async requestExportReport(
     opts: Opts.AddExportOpts
   ): Promise<Res.AddExportResponse> {
     return await this.api("AddExport", opts);
   }
-
   async getExportStatuses(
     opts: Opts.ExportStatusOpts
   ): Promise<Res.ExportStatusResponse> {
     return await this.api("ExportStatus", opts);
   }
-
   // TODO: Add return type - this returns error as content-type needs to be set in client
   async getExportReport(opts: Opts.RetrieveExportOpts): Promise<any> {
     return await this.api("RetrieveExport", opts);
   }
-
   async removeExportReport(
     opts: Opts.RemoveExportOpts
   ): Promise<Res.RemoveExportResponse> {
     return await this.api("RemoveExport", opts);
   }
-
   async addStandardOrder(
     opts: Opts.AddOrderOpts
   ): Promise<Res.AddOrderResponse> {
     return await this.api("AddOrder", opts);
   }
-
   async cancelOpenOrder(
     opts: Opts.CancelOrderOpts
   ): Promise<Res.CancelOrderResponse> {
     return await this.api("CancelOrder", opts);
   }
-
   async getDepositMethods(
     opts: Opts.DepositMethodsOpts
   ): Promise<Res.DepositMethodsResponse> {
     return await this.api("DepositMethods", opts);
   }
-
   async getDepositAddresses(
     opts: Opts.DepositAddressesOpts
   ): Promise<Res.DepositAdddressesResponse> {
     return await this.api("DepositAddresses", opts);
   }
-
   async getDepositStatus(
     opts: Opts.DepositStatusOpts
   ): Promise<Res.DepositStatusResponse> {
     return await this.api("DepositStatus", opts);
   }
-
   async getWithdrawlInfo(
     opts: Opts.WithdrawInfoOpts
   ): Promise<Res.WithdrawInfoResponse> {
