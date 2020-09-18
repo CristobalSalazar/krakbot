@@ -1,34 +1,23 @@
-import KrakenApi from "./api";
-import { API_KEY, API_SECRET, WATCHLIST } from "./config";
-import { getDb } from "./db/mongo";
-import TickerService from "./db/services/ticker.service";
-import { DOTETH } from "./util/asset-pairs";
-import Time from "./util/time";
+import { CoinGeckoAPI } from "@coingecko/cg-api-ts";
+import { API_KEY, API_SECRET } from "./config";
+import KrakenApi from "./kraken";
+import { testStrategy } from "./strategies/test.strategy";
+import fetch from "node-fetch";
 
-interface Services {
-  tickerService: TickerService;
+export type Services = {
+  kraken: KrakenApi;
+  coinGecko: CoinGeckoAPI;
+};
+
+function initServices(): Services {
+  return {
+    kraken: new KrakenApi(API_KEY, API_SECRET),
+    coinGecko: new CoinGeckoAPI(fetch),
+  };
 }
 
 async function main() {
-  const api = new KrakenApi(API_KEY, API_SECRET);
-  const db = await getDb();
-  const services: Services = {
-    tickerService: new TickerService(db),
-  };
-
-  const res = await api.getWithdrawlInfo({
-    asset: "XETH",
-    key: "metamask",
-    amount: "1",
-  });
-
-  console.log(JSON.stringify(res, null, 2));
-  //setInterval(() => poll(api, services), Time.minutes(1));
+  const services = initServices();
+  testStrategy.run(services);
 }
 main();
-
-async function poll(api: KrakenApi, services: Services) {
-  const { tickerService } = services;
-  const [tickerResponse] = await Promise.all([api.getTickerInfo(WATCHLIST)]);
-  tickerService.save(tickerResponse);
-}
