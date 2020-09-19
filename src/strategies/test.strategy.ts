@@ -1,11 +1,11 @@
-import { DOTXBT, LINKXBT } from "../util/asset-pairs";
+import { ADAXBT, DOTXBT, LINKXBT } from "../util/asset-pairs";
 import Time from "../util/time";
 import { percentDifference } from "../util/math";
 import fs from "fs";
 import { Services } from "../main";
 
-const purchases = {};
-var totalGain = 0;
+var balance = 0.01;
+var purchases: { [id: string]: { price: number; vol: number } } = {};
 
 function log(msg: string) {
   const logmsg = `[${new Date().toLocaleString()}] ${msg}`;
@@ -16,17 +16,9 @@ function log(msg: string) {
 export const testStrategy = {
   async run(services: Services) {
     console.log(`Running ${__filename} strategy`);
+    console.log("BALANCE", balance);
     setInterval(() => poll(services), Time.seconds(3));
   },
-};
-
-type ExchangeInfoResult = {
-  coin: string;
-  vs: string;
-  kraken: number;
-  coingecko: number;
-  diff: number;
-  percentDiff: number;
 };
 
 async function getExchangeDiffs(
@@ -57,31 +49,49 @@ async function getExchangeDiffs(
 async function poll(services: Services) {
   const PERCENT_BUY = -0.25;
   const PERCENT_SELL = 0.25;
-
+  const PERCENT_INVESTMENT = 0.1;
   try {
     const results = await Promise.all([
       getExchangeDiffs("polkadot", DOTXBT, services),
       getExchangeDiffs("chainlink", LINKXBT, services),
+      getExchangeDiffs("cardano", ADAXBT, services),
     ]);
-
     for (const result of results) {
-      const lastBuyPrice = purchases[result.coin];
-      if (lastBuyPrice === undefined && result.percentDiff <= PERCENT_BUY) {
-        purchases[result.coin] = result.kraken;
-        log(`BUY ${result.coin} for ${result.kraken}`);
+      const purchase = purchases[result.coin];
+      if (purchase === undefined && result.percentDiff <= PERCENT_BUY) {
+        const currentPrice = result.kraken;
+        // price is lower than coingecko so buy
+        const investment = PERCENT_INVESTMENT * balance; // get a percentage of holdings
+        balance -= investment; // subtract from holdings
+        const vol = investment / currentPrice;
+        purchases[result.coin] = { price: currentPrice, vol };
+        log(`BUY ${vol} ${result.coin.toUpperCase()} for 1 x ${result.kraken}`);
       } else if (
-        lastBuyPrice !== undefined &&
-        percentDifference(result.kraken, lastBuyPrice) >= PERCENT_SELL
+        purchase !== undefined &&
+        percentDifference(result.kraken, purchase.price) >= PERCENT_SELL
       ) {
+        // price is higher than previous by percent
         const sellPrice = result.kraken;
-        const gain = sellPrice - purchases[result.coin];
-        totalGain += gain;
-        log(`SELL ${result.coin} for ${sellPrice}`);
-        log(`TX GAIN: ${gain}, TOTAL GAIN: ${totalGain}`);
+        const net = sellPrice * purchase.vol - purchase.price * purchase.vol;
+        balance += net;
+        log(`SELL ${result.coin.toUpperCase()} for ${sellPrice}`);
+        log(`BALANCE: ${balance}`);
+        purchases[result.coin] = undefined;
+      } else if (purchase !== undefined && result.percentDiff >= PERCENT_SELL) {
+        // price has exceeded
+        const sellPrice = result.kraken;
+        const net = sellPrice * purchase.vol - purchase.price * purchase.vol;
+        balance += net;
+        log(
+          `STOP LOSS ${
+            purchase.vol
+          } ${result.coin.toUpperCase()} for ${sellPrice}`
+        );
+        log(`BALANCE: ${balance}`);
         purchases[result.coin] = undefined;
       }
     }
   } catch (err) {
-    log("Error fetching results");
+    log(`Error fetching results ${err}`);
   }
 }
