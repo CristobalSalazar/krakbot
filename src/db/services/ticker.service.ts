@@ -1,5 +1,5 @@
 import { Db } from "mongodb";
-import { TickerResponse } from "../../kraken/responses";
+import { TickerResponse } from "../../services/kraken/responses";
 import { TickerModel } from "../models/ticker.model";
 
 export default class TickerService {

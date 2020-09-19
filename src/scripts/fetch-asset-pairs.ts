@@ -1,4 +1,4 @@
-import KrakenApi from "../kraken";
+import KrakenApi from "../services/kraken";
 import _ from "lodash";
 import fs from "fs";
 import path from "path";

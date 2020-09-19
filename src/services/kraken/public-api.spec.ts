@@ -1,6 +1,6 @@
-import { API_KEY, API_SECRET } from "../config";
+import { API_KEY, API_SECRET } from "../../config";
 import KrakenApi from ".";
-import { DOTXBT, ETHDAI } from "../util/asset-pairs";
+import { DOTXBT, ETHDAI } from "../../util/asset-pairs";
 
 describe("Public Api", () => {
   const api = new KrakenApi(API_KEY, API_SECRET);
