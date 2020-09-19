@@ -24,9 +24,9 @@ export default class Logger {
 
   balance(amount: number) {
     const ts = this.getTimestamp();
-    const log = `${color.blueBright(ts)} ${color.yellowBright(
-      "BALANCE"
-    )} ${this.coinFormat(amount.toString())}`;
+    const log = `${color.blueBright(ts)} BALANCE ${this.coinFormat(
+      amount.toString()
+    )}`;
     console.log(log);
     this.logFile(`${ts} BALANCE ${amount}`);
   }
