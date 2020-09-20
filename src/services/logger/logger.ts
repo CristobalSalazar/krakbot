@@ -2,12 +2,17 @@ import fs from "fs";
 import color from "cli-color";
 
 export default class Logger {
-  private getTimestamp() {
-    return `[${new Date().toLocaleString()}]`;
+  private getTimestamps(): [console: string, file: string] {
+    const str = `[${new Date().toLocaleString()}]`;
+    return [color.whiteBright(str), str];
   }
 
-  coinFormat(msg: string) {
+  amountfmt(msg: string) {
     return color.yellowBright(msg);
+  }
+
+  coinfmt(coin: string) {
+    return color.bold(color.cyan(coin));
   }
 
   logFile(msg: string) {
@@ -15,46 +20,62 @@ export default class Logger {
   }
 
   info(msg: string) {
-    const ts = this.getTimestamp();
-    const log = `${color.blueBright(ts)} ${color.cyanBright("INFO")} ${msg}`;
-    const file = `${ts} INFO: ${msg}`;
+    // console timestamp file timestamp
+    const [cts, fts] = this.getTimestamps();
+    const log = `${cts} ${color.cyanBright("INFO")} ${msg}`;
+    const file = `${fts} INFO ${msg}`;
     this.logFile(file);
     console.log(log);
   }
 
+  intro() {
+    const banner = fs.readFileSync("./banner.txt");
+    console.log(color.yellowBright(banner.toString()));
+  }
+
+  buyThreshold(amount: number) {
+    const [cts, fts] = this.getTimestamps();
+    const log = `${cts} ${color.cyanBright("BUY THRESHOLD")} = ${this.amountfmt(
+      amount.toString() + "%"
+    )}`;
+    const file = `${fts} BUY THRESHOLD = ${amount.toString()}%`;
+    console.log(log);
+    this.logFile(file);
+  }
+
   balance(amount: number) {
-    const ts = this.getTimestamp();
-    const log = `${color.blueBright(ts)} BALANCE ${this.coinFormat(
+    const [cts, fts] = this.getTimestamps();
+    const log = `${cts} ${color.yellowBright("BALANCE")} = ${this.amountfmt(
       amount.toString()
     )}`;
     console.log(log);
-    this.logFile(`${ts} BALANCE ${amount}`);
+    this.logFile(`${fts} BALANCE = ${amount}`);
   }
 
   buy(amount: number, coin: string, price: number) {
-    const ts = this.getTimestamp();
-    const log = `${color.blueBright(ts)} ${color.greenBright(
-      "BUY"
-    )} ${amount} ${coin.toUpperCase()} @ ${this.coinFormat(price.toString())}`;
-    const file = `${ts} BUY ${coin.toUpperCase()} @ ${price}`;
+    const [cts, fts] = this.getTimestamps();
+    const log = `${cts} ${color.greenBright("BUY")} ${amount} ${this.coinfmt(
+      coin.toUpperCase()
+    )} @ ${this.amountfmt(price.toString())}`;
+    const file = `${fts} BUY ${coin.toUpperCase()} @ ${price}`;
     this.logFile(file);
     console.log(log);
   }
 
   sell(amount: number, coin: string, price: number) {
-    const ts = this.getTimestamp();
-    const log = `${color.blueBright(ts)} ${color.redBright(
-      "SELL"
-    )} ${amount} ${coin.toUpperCase()} @ ${this.coinFormat(price.toString())}`;
-    const file = `${ts} SELL ${coin.toUpperCase()} @ ${price}`;
+    const [cts, fts] = this.getTimestamps();
+    const log = `${cts} ${color.redBright("SELL")} ${amount} ${this.coinfmt(
+      coin.toUpperCase()
+    )} @ ${this.amountfmt(price.toString())}`;
+    const file = `${fts} SELL ${coin.toUpperCase()} @ ${price}`;
     this.logFile(file);
     console.log(log);
   }
 
   error(msg: string) {
-    const ts = this.getTimestamp();
-    const log = `${color.bgBlueBright(ts)} ${color.redBright("ERROR:")} ${msg}`;
-    const file = `${ts} ERROR: ${msg}`;
+    const [cts, fts] = this.getTimestamps();
+    const log = `${cts} ${color.redBright("ERROR:")} ${msg}`;
+    const file = `${fts} ERROR: ${msg}`;
     this.logFile(file);
     console.log(log);
   }

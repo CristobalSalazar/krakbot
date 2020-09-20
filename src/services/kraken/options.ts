@@ -67,7 +67,7 @@ export type AddOrderOpts = Pair &
   };
 
 // Subtypes
-type Volume = { volume: string };
+type Volume = { volume: number };
 type OptionalPrice = { price?: string };
 type OptionalSecondaryPrice = { price2?: string };
 type OptionalLeverage = { leverage?: string };
